@@ -9,7 +9,7 @@ uma pasta pré-definida em um local de armazenamento (Pendrive, hds, cartões de
 
 Claro que existem diversos softwares com essa finalidade, a maioria esmagadora é uma versão 
 paga ou freeware. Nosso script é de distribuição e licença free, permitindo identificar os 
-pincipais tipos de instaladores mais utilizados.
+principais tipos de instaladores mais utilizados.
 
 A lista de empacotadores fica no próprio arquivo do script, sendo de grande facilidade para 
 acrescentar novos empacotadores â lista.
