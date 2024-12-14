@@ -14,7 +14,8 @@ principais tipos de instaladores mais utilizados.
 A lista de empacotadores fica no próprio arquivo do script, sendo de grande facilidade para 
 acrescentar novos empacotadores â lista.
 
-Alguns softwares necessitam de interação, exigindo uma ação do usuário. Não foi possível contornar/interagir diretamente com esse tipo de comportamento. Portanto, isso vai indicar um erro de continuidade no software, com comportamentos e erros diversos.
+Alguns softwares necessitam de interação, exigindo uma ação do usuário. Não foi possível contornar/interagir diretamente com esse tipo de comportamento.
+Portanto, insistir o uso com esse software vai gerar uma crítica ou erro de continuidade no software, com comportamentos e erros diversos.
 
 Testes devem ser realizados e somente softwares que não exigem a ação do usuário podem ser usados no momento.
 
