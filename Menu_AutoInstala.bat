@@ -2,7 +2,7 @@
 	:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	::                                                                 ::
 	::  Script          :Menu_AutoInstala.bat                          ::
-	::  Versão          :0.0.22 - 22/04/2024                           ::
+	::  Versão          :0.0.23 - 22/04/2024                           ::
 	::  Descrição       :Lista setup de instaladores diversos.         ::
 	::  Argumentos      :Sem entrada de argumentos.                    ::
 	::  Autor           :Valmir Morais                                 ::
@@ -19,10 +19,6 @@
 	
 	cd /d "%~dp0\APPS\" && (
 		fltmc.exe >nul 2>&1 || (
-			@REM start "" /b "%~dp0%~n0.lnk" 2>nul || (
-				@REM call :sem_pasta_arquivo "LANÇAR COMO ADMINISTRADOR."
-			@REM )
-			@REM exit
 			powershell.exe -Command "Start-Process cmd \"/k %~dpnx0\" -Verb RunAs" || (
 				call :sem_pasta_arquivo "LANÇAR COMO ADMINISTRADOR."
 			)
@@ -37,8 +33,6 @@
 	:::::::::::::::Buscando arquivos para formar a lista de instaladores.:::::::::::::::
 		pushd "%~dp0\APPS\"
 			set count=0
-			@REM for /f "delims=" %%a in ('dir %~dp0*.msi %~dp0*.exe /s /b /a:-d-h') do (
-			@REM Execução muito mais rápida que o "DIR".
 			for /r %~dp0\APPS\ %%a in (*.exe *.msi *.lnk) do (
 				if !count! leq 98 (
 					set /a count+=1
@@ -49,7 +43,6 @@
 			if !count!==0 ( call :sem_pasta_arquivo " DIRETÓRIO DE APPS VAZIO. ")
 			if %count% lss 10 (set "spc1= ")
 			if %count% geq 10 (set "spc1=")
-			 @REM set /a _x_=%count%%2|%systemroot%\system32\findstr.exe /x [1] && (set "spc2=rem ") || (set "spc2=")
 			for /f %%V in ('set /a x^=!count!%%2') do (
 				if %%V equ 0 (set "spc2=rem ")
 				if %%V equ 1 (set "spc2=")
@@ -155,7 +148,6 @@
 
 	:inicio
 	cls
-	@REM set "ch="
 	for %%i in (ch first secon) do set "%%i="
 
 	:sub_inicio
@@ -241,7 +233,7 @@
 
 				@rem Esse bloco efetiva a digitação da primeira tecla.
 				if "%%k"=="first" (
-					@rem Este bloco condicional para certifica que sejam entregues apenas números nessa posiçõa inicial.
+					@rem Este bloco condicional certifica que sejam entregues apenas números nessa posiçõa inicial.
 					echo.!first!|%systemroot%\system32\findstr.exe "[0123456789]" >nul||(goto :capta)
 					@rem Esse trecho certifica que valor nulo para a variável "ch" assuma o valor do algarismo digitado.
 					if "!ch!"=="" (set "ch=!%%k!") else (set "ch=!ch!!%%k!")
@@ -297,10 +289,6 @@
 		for %%R in (%ch%) do (
 			set "#=%%R"
 			set "##="
-			@REM echo.%%R|%systemroot%\system32\findstr.exe /x "[0123456789]-[0]" /x "[0123456789][0123456789]-[0]" /x "[0]-[0123456789]" /x "[0]-[0123456789][0123456789]" >nul 2>nul &&
-				@REM call set "menu_inst[!qtd_item!]=[1;38;5;190m%%menu_inst[!qtd_item!]%% -              ERROR - FAIXA INVÝLIDA^!         - --- [m"
-				@REM call set ch=!ch:%%R=!
-			@REM ) else (
 				echo %%R|%systemroot%\system32\findstr.exe /x "[0][123456789]" >nul 2>&1 && (	%= Identifica ítem com zero a esquerda =%
 					set "#=!#:~-1!"
 					call set ch=!ch:%%R=%%#%%!
@@ -375,7 +363,6 @@
 										set nao_identificado=0
 										start "" /b !menu[%%g]! !packers_switches[%%J]! && (
 											<nul set/p"=[22;0H[1C"
-											@REM cmd /q /c "for /l %%B in () do (for /l %%T in (1,1,58) do (for /f "tokens=1" %%L in ( 'tasklist /nh /fi "imagename eq !menu1[%%g]: =!"' ) do (if not "%%L"=="!menu1[%%g]: =!" ( exit /b ) else ( @echo|set/p"=[1;42m [m" & ping -n 1 127.1 >nul )))) & set/p"=[1K[2G[38;5;242;1m                        AGUARDE...                       [m[2G"<nul"
 											cmd /v:on /q /c "for /l %%B in () do (for /l %%T in (2,2,58) do (WMIC.exe PROCESS where "Name='!menu1[%%g]:~0,-36!'" get CommandLine 2>nul|findstr /c:!menu[%%g]!>nul && ( @echo|set/p"=[2G[1;48;5;94m.^^!barra_andamento:~0,%%T^^![m" & pathping -4 -h 1 -n -p 150 -q 2 -w 1 127.1 >nul ) || (set/p"=[1K[2G[38;5;242;1m!barra_andamento![m[2G"<nul & exit /b))) & set/p"=[1K[2G[38;5;242;1m!barra_andamento![m[2G"<nul"
 											call set "menu_inst[!qtd_item!]=%%menu_inst[!qtd_item!]%%[4D[1;48;5;19m-  OK [m"
 										) || (
@@ -388,7 +375,6 @@
 								set nao_identificado=0
 								start "" /b msiexec /i !menu[%%g]! /qr /norestart >nul 2>nul && (
 									<nul set/p"=[22;0H[1C"
-									@REM cmd /C "for /l %%B in () do (for /l %%T in (1,1,29) do (for /f skip^=1^ eol^=^ tokens^=3^ delims^=^"^ %%L in ('wmic PROCESS where "Name='msiexec.exe'" get CommandLine') do (if "%%L"==!menu[%%g]! (@echo|set/p"=[1;48;5;238m  [m" & pathping -4 -h 1 -n -p 150 -q 2 -w 10 127.1 >nul ) else (exit /b)))) & set/p"=[1K[2G[38;5;242;1m                        AGUARDE...                       [m[2G"<nul"
 									cmd /v:on /q /C "for /l %%B in () do (for /l %%T in (2,2,58) do (WMIC.exe PROCESS where "Name='msiexec.exe'" get CommandLine 2>nul|findstr /c:!menu[%%g]! >nul && (@echo|set/p"=[2G[1;48;5;94m.^^!barra_andamento:~0,%%T^^![m" & pathping -4 -h 1 -n -p 150 -q 2 -w 1 127.1 >nul ) || (set/p"=[1K[2G[38;5;242;1m!barra_andamento![m[2G"<nul & exit /b))) & set/p"=[1K[2G[38;5;242;1m!barra_andamento![m[2G"<nul"
 									call set "menu_inst[!qtd_item!]=%%menu_inst[!qtd_item!]%%[4D[1;48;5;19m-  OK [m"
 								) || (
@@ -425,7 +411,6 @@
 		)
 
 	set qtd_it=!qtd_item!
-	REM echo.
 	<nul set/p"=[22H[0m [38;5;214;1;3m+/-[38;5;242;1m=Acima/Abaixo      [97;1m−−− [38;5;214;1;23mFEITO [97;1m−−−           [38;5;214;1;3mEnter[38;5;242;1m=Voltar [m"
 
 	:rolagem
